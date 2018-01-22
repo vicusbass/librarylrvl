@@ -12,5 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $books = DB::table('books')->get()->sortBy('title');
+
+    return view('books', compact('books'));
 });
