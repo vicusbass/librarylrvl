@@ -11,8 +11,18 @@
 |
 */
 
-Route::get('/', function () {
-    $books = DB::table('books')->get()->sortBy('title');
+Route::get('/admin/books', 'BooksController@index');
+Route::get('/admin/books/create', 'BooksController@create');
+Route::post('/admin/books/create', 'BooksController@store');
 
-    return view('books', compact('books'));
+Route::get('/admin/duebooks', function () {
+    return view('admin.duebooks');
+});
+
+Route::get('/admin/users', function () {
+    return view('admin.users');
+});
+
+Route::get('/admin', function () {
+    return view('admin.index');
 });
