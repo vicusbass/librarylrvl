@@ -31,10 +31,9 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/user/books', 'BooksController@search');
+    Route::get('/user/rentbook/{id}', 'BooksController@rentbook');
 
-    Route::get('/user/duebooks', function () {
-        return view('user.duebooks');
-    });
+    Route::get('/user/duebooks', 'BooksController@duebooks_user');
 
     Route::get('user', 'HomeController@user_index')->name('user');
 });
