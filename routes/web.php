@@ -11,21 +11,38 @@
 |
 */
 
-Route::get('/admin/books', 'BooksController@index');
-Route::get('/admin/books/create', 'BooksController@create');
-Route::post('/admin/books/create', 'BooksController@store');
+Route::group(['middleware' => ['auth', 'admin']], function () {
+    Route::get('/admin/books', 'BooksController@index');
+    Route::get('/admin/books/create', 'BooksController@create');
+    Route::post('/admin/books/create', 'BooksController@store');
 
-Route::get('/admin/duebooks', function () {
-    return view('admin.duebooks');
+    Route::get('/admin/duebooks', function () {
+        return view('admin.duebooks');
+    });
+
+    Route::get('/admin/users', function () {
+        return view('admin.users');
+    });
+
+    Route::get('/admin', function () {
+        return view('admin.index');
+    });
 });
 
-Route::get('/admin/users', function () {
-    return view('admin.users');
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/user/books', 'BooksController@search');
+
+    Route::get('/user/duebooks', function () {
+        return view('user.duebooks');
+    });
+
+    Route::get('user', 'HomeController@user_index')->name('user');
 });
 
-Route::get('/admin', function () {
-    return view('admin.index');
-});
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/logout', 'Auth\LoginController@logout');
+
+
+

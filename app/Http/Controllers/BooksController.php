@@ -13,6 +13,23 @@ class BooksController extends Controller
         return view('admin.books', compact('books'));
     }
 
+    /**
+     * Searching books with LIKE operators
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function search()
+    {
+        $title = \Request::get('title');
+        $authors = \Request::get('authors');
+        $isbn = \Request::get('isbn');
+
+        $books = Book::where('title', 'like', '%' . $title . '%')
+            ->where('authors', 'like', '%' . $authors . '%')
+            ->where('isbn', 'like', '%' . $isbn . '%')->get();
+
+        return view('user.books', compact('books'));
+    }
+
     public function create()
     {
         return view('admin.forms.createbook');
