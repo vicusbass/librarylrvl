@@ -16,9 +16,8 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::get('/admin/books/create', 'BooksController@create');
     Route::post('/admin/books/create', 'BooksController@store');
 
-    Route::get('/admin/duebooks', function () {
-        return view('admin.duebooks');
-    });
+    Route::get('/admin/duebooks', 'BooksController@duebooks_admin');
+    Route::get('/admin/returnbook/{id}/', 'BooksController@returnbook');
 
     Route::get('/admin/users', function () {
         return view('admin.users');

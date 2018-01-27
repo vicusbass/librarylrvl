@@ -97,4 +97,32 @@ class BooksController extends Controller
             ->get();
         return view('user.duebooks', compact('result'));
     }
+
+    public function duebooks_admin()
+    {
+        //get all rented books, for all users
+        $result = Rental
+            ::select('rentals.id as rental_id', 'users.id as user_id',
+                'users.name as name', 'books.id as book_id', 'books.title as title', 'books.authors as authors', 'rentals.expiration_date as expiration_date')
+            ->join('books', 'books.id', '=', 'rentals.book_id')
+            ->join('users', 'users.id', '=', 'rentals.user_id')
+            ->orderBy('users.name', 'asc')
+            ->orderBy('rentals.expiration_date', 'desc')
+            ->getQuery()
+            ->get();
+        return view('admin.duebooks', compact('result'));
+    }
+
+    public function returnbook($id)
+    {
+        $rental = Rental::find($id);
+        $book_id = $rental->book_id;
+        //increase number of available book and create a rentals entry
+        $book = Book::find($book_id);
+        $book->available = $book->available + 1;
+        $book->save();
+
+        Rental::destroy($id);
+        return $this->duebooks_admin();
+    }
 }
